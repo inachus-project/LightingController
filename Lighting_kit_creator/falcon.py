@@ -6,13 +6,24 @@ from datetime import datetime
 # Constants
 ENGINE_LOWER = 1
 ENGINE_UPPER = 10
-STRIP_LENGTH = 30
+LANDING_LIGHTS = [11, 12, 13, 15, 17, 19, 20]
+LASERS = [14, 16, 18]
+FRONT_LASER = [14, 16]
+TOP_LASER = [18]
+STRIP_LENGTH = 21
 
 # Engine color constants
 ENGINE_NORMAL = 0x202040
+ENGINE_FULL = 0x404040
 MID_DEATH = 0x202010
 ROUGH_START = 0x404000
 HYPERSPACE = 0xFFFF40
+
+# Landing light color constants
+LANDING_LIGHTS_ON = 0xFFFFFF
+
+# Laser light constants
+LASER_ON = 0xFF0000
 
 class Neopixel(RGB.Pixel):
 
@@ -64,6 +75,78 @@ class MillenniumFalcon:
 
         # Create engine indexes
         self.enginelist = self.createengineindexes()
+
+        # Create landing light indexes
+        self.landinglights = LANDING_LIGHTS
+
+        # Create laser indexes
+        self.lasers = LASERS
+
+        # Create front laser indexes
+        self.frontlasers = FRONT_LASER
+
+        # Create top laser indexes
+        self.toplasers = TOP_LASER
+
+    def testalllighttypes(self):
+        """
+        Tests all the different light types
+        :return: None
+        """
+
+        # Start in black
+        self.setallcolor(RGB.BLACK)
+        self.updatelights()
+
+        # Test engines
+        self.setenginecolor(ENGINE_NORMAL)
+        self.updatelights()
+
+        # Pause
+        time.sleep(5)
+        self.setallcolor(RGB.BLACK)
+        self.updatelights()
+
+        # Test landing lights
+        self.setlandinglights(LANDING_LIGHTS_ON)
+        self.updatelights()
+
+        # Pause
+        time.sleep(5)
+        self.setallcolor(RGB.BLACK)
+        self.updatelights()
+
+        # Test lasers
+        count = 0
+        while count < 3:
+
+            self.setlasercolors(LASER_ON)
+            self.updatelights()
+
+            time.sleep(0.05)
+
+            self.setlasercolors(RGB.BLACK)
+            self.updatelights()
+
+            time.sleep(0.1)
+
+            count += 1
+
+        time.sleep(0.5)
+
+        count = 0
+        while count < 3:
+            self.setlasercolors(0xFF0000)
+            self.updatelights()
+
+            time.sleep(0.05)
+
+            self.setlasercolors(RGB.BLACK)
+            self.updatelights()
+
+            time.sleep(0.1)
+
+            count += 1
 
     def lighttest(self):
         """
@@ -134,6 +217,154 @@ class MillenniumFalcon:
                 time.sleep(sleep_time)
                 main_count -= 1
 
+    def takingoff(self):
+        """
+        Runs the taking off simulation
+        :return: None
+        """
+
+        # Go full throttle
+        enginecolor = RGB.Pixel(initial_color=ENGINE_NORMAL)
+        main_count = 0
+        sleep_time = 0.025
+        while main_count < 0x20:
+            enginecolor.modifyred(1)
+            enginecolor.modifygreen(1)
+            self.setenginecolor(enginecolor.getcolor())
+
+            self.updatelights()
+            time.sleep(sleep_time)
+            main_count += 1
+
+        # Wait
+        time.sleep(1)
+
+        # Dim out landing lights
+        landing_lights = RGB.Pixel(initial_color=LANDING_LIGHTS_ON)
+        main_count = 0
+        sleep_time = 0.005
+        while main_count < 0xFF:
+            landing_lights.modifyred(-1)
+            landing_lights.modifygreen(-1)
+            landing_lights.modifyblue(-1)
+            self.setlandinglights(landing_lights.getcolor())
+
+            self.updatelights()
+            time.sleep(sleep_time)
+            main_count += 1
+
+        # Wait
+        time.sleep(5)
+
+        # Go to normal power ENGINE_FULL
+        enginecolor = RGB.Pixel(initial_color=ENGINE_FULL)
+        main_count = 0
+        sleep_time = 0.025
+        while main_count < 0x20:
+            enginecolor.modifyred(-1)
+            enginecolor.modifygreen(-1)
+            self.setenginecolor(enginecolor.getcolor())
+
+            self.updatelights()
+            time.sleep(sleep_time)
+            main_count += 1
+
+        # Double check engine is normal
+        self.setenginecolor(ENGINE_NORMAL)
+        self.updatelights()
+
+        # Wait
+        time.sleep(2)
+
+    def landing(self):
+        """
+        Runs the landing simulation
+        :return: None
+        """
+
+        # Check engine normal
+        enginecolor = RGB.Pixel(initial_color=ENGINE_NORMAL)
+        self.setenginecolor(enginecolor.getcolor())
+        self.updatelights()
+
+        # Dim out landing lights
+        landing_lights = RGB.Pixel(initial_color=RGB.BLACK)
+        main_count = 0
+        sleep_time = 0.005
+        while main_count < 0xFF:
+            landing_lights.modifyred(1)
+            landing_lights.modifygreen(1)
+            landing_lights.modifyblue(1)
+            self.setlandinglights(landing_lights.getcolor())
+
+            self.updatelights()
+            time.sleep(sleep_time)
+            main_count += 1
+
+        # Double check landing lights all the way on
+        self.setlandinglights(LANDING_LIGHTS_ON)
+        self.updatelights()
+
+        # Wait
+        time.sleep(5)
+
+        # Go to normal power ENGINE_FULL
+        enginecolor = RGB.Pixel(initial_color=ENGINE_NORMAL)
+        sleep_time = 0.025
+        while enginecolor.getblue() > 0:
+            enginecolor.modifyred(-1)
+            enginecolor.modifygreen(-1)
+            enginecolor.modifyblue(-1)
+            self.setenginecolor(enginecolor.getcolor())
+
+            self.updatelights()
+            time.sleep(sleep_time)
+
+        # Double check engine is normal
+        self.setenginecolor(RGB.BLACK)
+        self.updatelights()
+
+        # Wait
+        time.sleep(2)
+
+    def fireeverything(self):
+        """
+        Runs the fire everything simulation
+        :return: None
+        """
+        number_of_bursts = 0
+
+        while number_of_bursts < 3:
+            # Fire lasers
+            count = 0
+            while count < 3:
+
+                # Fire front lasers
+                self.setfrontlasercolors(LASER_ON)
+                self.updatelights()
+
+                time.sleep(0.05)
+
+                self.setfrontlasercolors(RGB.BLACK)
+                self.updatelights()
+
+                time.sleep(0.025)
+
+                # Fire top laser
+                self.settoplasercolors(LASER_ON)
+                self.updatelights()
+
+                time.sleep(0.05)
+
+                self.settoplasercolors(RGB.BLACK)
+                self.updatelights()
+
+                time.sleep(0.025)
+
+                count += 1
+
+            number_of_bursts += 1
+            time.sleep(0.5)
 
     def startupengines(self):
         """
@@ -166,6 +397,7 @@ class MillenniumFalcon:
         :return: None
         """
         self.setenginecolor(RGB.BLACK)
+        self.setlandinglights(LANDING_LIGHTS_ON)
 
         self.updatelights()
 
@@ -356,6 +588,58 @@ class MillenniumFalcon:
         for p in self.pixel_list:
 
             if p.getindex() in self.enginelist:
+
+                p.setcolor(color)
+
+    def setlandinglights(self, color):
+        """
+        Sets all the landing lights to the corresponding color
+        :param color: 24 bit color value
+        :return: None
+        """
+
+        for p in self.pixel_list:
+
+            if p.getindex() in self.landinglights:
+
+                p.setcolor(color)
+
+    def setlasercolors(self, color):
+        """
+        Sets all the lasers to the corresponding color
+        :param color: 24 bit color value
+        :return: None
+        """
+
+        for p in self.pixel_list:
+
+            if p.getindex() in self.lasers:
+
+                p.setcolor(color)
+
+    def setfrontlasercolors(self, color):
+        """
+        Sets all the front lasers to the corresponding color
+        :param color: 24 bit color value
+        :return: None
+        """
+
+        for p in self.pixel_list:
+
+            if p.getindex() in self.frontlasers:
+
+                p.setcolor(color)
+
+    def settoplasercolors(self, color):
+        """
+        Sets all the top lasers to the corresponding color
+        :param color: 24 bit color value
+        :return: None
+        """
+
+        for p in self.pixel_list:
+
+            if p.getindex() in self.toplasers:
 
                 p.setcolor(color)
 

@@ -14,7 +14,8 @@ if __name__ == "__main__":
     mf = falcon.MillenniumFalcon("COM4")
 
     # mf.canyouguess()
-    mf.lighttest()
+    # mf.lighttest()
+    # mf.testalllighttypes()
 
     while True:
         mf.enginekill()
@@ -22,6 +23,7 @@ if __name__ == "__main__":
 
         mf.startupengines()
         time.sleep(2)
+        mf.takingoff()
 
         mf.losingpower()
         time.sleep(3)
@@ -29,7 +31,13 @@ if __name__ == "__main__":
         mf.restartengines()
         time.sleep(4)
 
-        mf.gotohyperspace()
+        mf.fireeverything()
+        time.sleep(5)
+
+        mf.landing()
+
+        # mf.gotohyperspace()
+        time.sleep(5)
 
 
     """
