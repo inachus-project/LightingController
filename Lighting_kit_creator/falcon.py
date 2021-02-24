@@ -148,17 +148,39 @@ class MillenniumFalcon:
 
             count += 1
 
+    def quickdisplay(self):
+        """
+        Runs a quick display of all lights
+        :return: None
+        """
+        while True:
+            # Turn everything off
+            self.setallcolor(RGB.BLACK)
+            self.updatelights()
+            time.sleep(5)
+
+            # Turn all on
+            self.setenginecolor(ENGINE_NORMAL)
+            self.setlandinglights(LANDING_LIGHTS_ON)
+            self.updatelights()
+            time.sleep(2)
+            self.fireeverything()
+            time.sleep(1)
+            self.fireeverything()
+            time.sleep(5)
+
     def lighttest(self):
         """
         Runs a test of all the lights
         :return: Does not return
         """
+        custom_time = 0.0000
 
         while True:
 
             # Go full red
             main_count = 0
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count <= 0xFF:
 
                 self.setallcolor(main_count << 16)
@@ -169,7 +191,7 @@ class MillenniumFalcon:
 
             # Taper off red
             main_count = 0xFF
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count >= 0:
                 self.setallcolor(main_count << 16)
 
@@ -179,7 +201,7 @@ class MillenniumFalcon:
 
             # Go full green
             main_count = 0
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count <= 0xFF:
                 self.setallcolor(main_count << 8)
 
@@ -189,7 +211,7 @@ class MillenniumFalcon:
 
             # Taper off green
             main_count = 0xFF
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count >= 0:
                 self.setallcolor(main_count << 8)
 
@@ -199,7 +221,7 @@ class MillenniumFalcon:
 
             # Go full blue
             main_count = 0
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count <= 0xFF:
                 self.setallcolor(main_count)
 
@@ -209,7 +231,7 @@ class MillenniumFalcon:
 
             # Taper off blue
             main_count = 0xFF
-            sleep_time = 0.005
+            sleep_time = custom_time
             while main_count >= 0:
                 self.setallcolor(main_count)
 

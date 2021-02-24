@@ -11,11 +11,12 @@ import falcon
 
 if __name__ == "__main__":
 
-    mf = falcon.MillenniumFalcon("COM4")
+    mf = falcon.MillenniumFalcon("COM5")
 
     # mf.canyouguess()
-    # mf.lighttest()
+    mf.lighttest()
     # mf.testalllighttypes()
+    # mf.quickdisplay()
 
     while True:
         mf.enginekill()
