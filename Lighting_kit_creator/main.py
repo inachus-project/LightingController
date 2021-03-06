@@ -14,32 +14,38 @@ if __name__ == "__main__":
     mf = falcon.MillenniumFalcon("COM5")
 
     # mf.canyouguess()
-    mf.lighttest()
+    # mf.lighttest()
     # mf.testalllighttypes()
     # mf.quickdisplay()
 
-    while True:
-        mf.enginekill()
-        time.sleep(2)
+    # while True:
+    mf.enginekill()
+    time.sleep(2)
 
-        mf.startupengines()
-        time.sleep(2)
-        mf.takingoff()
+    mf.startupengines()
+    time.sleep(2)
+    mf.takingoff()
 
-        mf.losingpower()
-        time.sleep(3)
+    mf.losingpower()
+    time.sleep(3)
 
-        mf.restartengines()
-        time.sleep(4)
+    mf.restartengines()
+    time.sleep(4)
 
-        mf.fireeverything()
-        time.sleep(5)
+    mf.fireeverything()
 
-        mf.landing()
+    time.sleep(5)
 
-        # mf.gotohyperspace()
-        time.sleep(5)
+    mf.landing()
 
+    time.sleep(2)
+    mf.startupengines()
+    time.sleep(2)
+    mf.takingoff()
+    time.sleep(2)
+
+    mf.gotohyperspace()
+    time.sleep(5)
 
     """
     sleep_time = 0.1

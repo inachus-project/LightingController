@@ -148,7 +148,6 @@ class LightingController:
 
     # Sends a command in slow mode
     def sendslowcommand(self, command):
-
         self.ser.write(command)
         result = self.ser.readline()
         if result == self.COM_RECEIVED:
@@ -258,7 +257,7 @@ class LightingController:
 
             # Check port
             result = self.ser.readline()
-            if result == "READY\n":
+            if result != b"READY\n":
 
                 self.ser.close()
                 return False

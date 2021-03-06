@@ -68,7 +68,7 @@ class MillenniumFalcon:
         # Lighting controller
         self.con = lc.LightingController(port=port, length=STRIP_LENGTH, color=RGB.BLACK)
         self.con.begin()
-        self.con.enablefastmode(fast_mode=True)
+        self.con.enablefastmode(fast_mode=False)
 
         # Create neopixels
         self.pixel_list = self.createlights()
@@ -87,6 +87,15 @@ class MillenniumFalcon:
 
         # Create top laser indexes
         self.toplasers = TOP_LASER
+
+    def enablefastmode(self, fast_mode=False):
+        """
+        Turns fast mode on or off
+        :param fast_mode: True to enable
+        :return: None
+        """
+
+        self.con.enablefastmode(fast_mode=fast_mode)
 
     def testalllighttypes(self):
         """
